@@ -27,15 +27,19 @@ public class GlacierApplication{
         try {
             ArchiveTransferManager atm = new ArchiveTransferManager(client, credentials);
             String vaultName = getArgument(args,VAULT_NAME_ARG);
-            String archiveToUpload = getArgument(args,INPUT_FILE_PATH_ARG);
+            String pathToArchive = getArgument(args,INPUT_FILE_PATH_ARG);
+            File fileToArchive = new File(pathToArchive);
             String accountId = getArgument(args,ACCOUNT_ID);
             String description = getArgument(args,DESCRIPTION);
 
+            Long fileSize=fileToArchive.length();
+
             System.out.println("-----------------------------------------------------------------");
-            System.out.println(String.format("Upload %s to %s",archiveToUpload,vaultName));
+            System.out.println(String.format("Upload %s to %s",pathToArchive,vaultName));
             System.out.println("-----------------------------------------------------------------");
-//            UploadResult result = atm.upload(vaultName, "my archive " + (new Date()), new File(archiveToUpload));
-            UploadResult result = atm.upload(accountId,vaultName,description,new File(archiveToUpload),new ProgressListenerImpl());
+
+
+            UploadResult result = atm.upload(accountId,vaultName,description,fileToArchive,new ProgressListenerImpl(fileSize));
             System.out.println("Archive ID: " + result.getArchiveId());
 
         } catch (Exception e)
