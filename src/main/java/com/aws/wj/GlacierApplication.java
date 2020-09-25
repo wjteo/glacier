@@ -7,7 +7,6 @@ import com.amazonaws.services.glacier.transfer.UploadResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
 
 public class GlacierApplication{
@@ -15,6 +14,7 @@ public class GlacierApplication{
     public final static String VAULT_NAME_ARG="--vault-name";
     public final static String INPUT_FILE_PATH_ARG="--input-file-path";
     public final static String ACCOUNT_ID="--account-id";
+    public final static String DESCRIPTION="--description";
     public static AmazonGlacierClient client;
 
 
@@ -29,12 +29,13 @@ public class GlacierApplication{
             String vaultName = getArgument(args,VAULT_NAME_ARG);
             String archiveToUpload = getArgument(args,INPUT_FILE_PATH_ARG);
             String accountId = getArgument(args,ACCOUNT_ID);
+            String description = getArgument(args,DESCRIPTION);
 
             System.out.println("-----------------------------------------------------------------");
             System.out.println(String.format("Upload %s to %s",archiveToUpload,vaultName));
             System.out.println("-----------------------------------------------------------------");
 //            UploadResult result = atm.upload(vaultName, "my archive " + (new Date()), new File(archiveToUpload));
-            UploadResult result = atm.upload(accountId,vaultName,"my archive " + (new Date()),new File(archiveToUpload),new ProgressListenerImpl());
+            UploadResult result = atm.upload(accountId,vaultName,description,new File(archiveToUpload),new ProgressListenerImpl());
             System.out.println("Archive ID: " + result.getArchiveId());
 
         } catch (Exception e)
